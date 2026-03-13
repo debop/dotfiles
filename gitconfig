@@ -1,0 +1,19 @@
+[user]
+	name = debop
+	email = sunghyouk.bae@gmail.com
+	signingkey = /Users/debop/.ssh/id_ed25519.pub
+[pull]
+	rebase = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[commit]
+	gpgsign = true
+[tag]
+	gpgSign = true
+[gpg]
+	format = ssh
+[core]
+	autocrlf = input
