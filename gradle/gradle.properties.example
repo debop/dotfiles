@@ -9,7 +9,7 @@ bluetape4k.gpr.key=YOUR_GITHUB_TOKEN
 bluetape4k.gpr.publish.key=YOUR_GITHUB_PUBLISH_TOKEN
 
 # Kotlin Daemon JVM Options
-kotlin.daemon.jvm.options=-Xmx4g -Xms512m
+kotlin.daemon.jvm.options=-Xms2G -Xmx4G -XX:+UseZGC -XX:+ZGenerational -Dfile.encoding=UTF-8 -XX:-MaxFDLimit -XX:+UnlockExperimentalVMOptions
 
 # Maven Central Publishing (값은 직접 입력 — 절대 커밋 금지)
 # central.user=
