@@ -3,6 +3,7 @@
 *.key
 *.pem
 zshrc_secrets
+gradle/gradle.properties
 
 # Claude Code 런타임 데이터
 claude/.claude.json

@@ -109,10 +109,38 @@ else
   echo "        claude mcp add exa -- npx -y exa-mcp-server"
 fi
 
+# ── 6. Gradle 설정 ───────────────────────────────────────────────────
+echo ""
+echo "==> [6/7] Gradle 설정..."
+mkdir -p "$HOME/.gradle"
+if [[ ! -f "$HOME/.gradle/gradle.properties" ]]; then
+  cp "$DOTFILES_DIR/gradle/gradle.properties.example" "$HOME/.gradle/gradle.properties"
+  echo "  생성: ~/.gradle/gradle.properties (값을 직접 채워주세요)"
+else
+  echo "  스킵: ~/.gradle/gradle.properties (이미 존재)"
+fi
+
+# ── 7. Maven toolchains + jenv ────────────────────────────────────────
+echo ""
+echo "==> [7/7] Maven toolchains + jenv 설정..."
+mkdir -p "$HOME/.m2"
+link_file "$DOTFILES_DIR/m2/toolchains.xml" "$HOME/.m2/toolchains.xml"
+
+if command -v jenv &>/dev/null; then
+  for jdk_home in /Library/Java/JavaVirtualMachines/*/Contents/Home; do
+    [[ -d "$jdk_home" ]] && jenv add "$jdk_home" 2>/dev/null || true
+  done
+  jenv global 21
+  echo "  완료: jenv global=21"
+else
+  echo "  스킵: jenv 미설치 (brew install jenv 후 재실행)"
+fi
+
 # ── 완료 ─────────────────────────────────────────────────────────────
 echo ""
 echo "==> 완료! 다음 단계:"
 echo "  1. ~/.zshrc_secrets 에 API 키 값 입력"
-echo "  2. 새 터미널 열기 (zshrc 반영)"
-echo "  3. Claude Code 재시작"
-echo "  4. JetBrains IDE 열면 jetbrains/intellij-index MCP 자동 등록됨"
+echo "  2. ~/.gradle/gradle.properties 에 토큰/GPG 키 값 입력"
+echo "  3. 새 터미널 열기 (zshrc 반영)"
+echo "  4. Claude Code 재시작"
+echo "  5. JetBrains IDE 열면 jetbrains/intellij-index MCP 자동 등록됨"
