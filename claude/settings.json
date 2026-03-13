@@ -63,6 +63,10 @@
           {
             "type": "command",
             "command": "node \"/Users/debop/.claude/plugins/cache/claude-context-mode/context-mode/0.9.17/hooks/sessionstart.mjs\""
+          },
+          {
+            "type": "command",
+            "command": "bash /Users/debop/.claude/hooks/dotfiles-sync.sh"
           }
         ]
       }
