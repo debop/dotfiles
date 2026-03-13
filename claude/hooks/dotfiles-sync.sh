@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SessionStart hook: dotfiles 자동 동기화
-# - 로컬 변경사항 있으면 push
+# - 로컬 변경사항 있으면 Brewfile dump + commit + push
 # - 원격에 새 변경사항 있으면 pull
 set -euo pipefail
 
@@ -14,7 +14,7 @@ LOCAL_CHANGED=$(git status --porcelain | wc -l | tr -d ' ')
 BEHIND=$(git rev-list HEAD..origin/main --count 2>/dev/null || echo 0)
 AHEAD=$(git rev-list origin/main..HEAD --count 2>/dev/null || echo 0)
 
-# 로컬 변경사항 있으면 커밋 + push
+# 로컬 변경사항 있으면 Brewfile 업데이트 + commit + push
 if [[ "$LOCAL_CHANGED" -gt 0 ]]; then
   brew bundle dump --file="$DOTFILES_DIR/Brewfile" --force 2>/dev/null || true
   git add -A

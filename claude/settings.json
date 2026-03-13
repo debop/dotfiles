@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/debop/.claude/plugins/cache/claude-context-mode/context-mode/0.9.17/hooks/pretooluse.mjs\""
+            "command": "node \"/opt/homebrew/lib/node_modules/context-mode/hooks/pretooluse.mjs\""
           }
         ]
       },
@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/debop/.claude/hooks/block-sensitive-files.sh"
+            "command": "bash __HOME__/.claude/hooks/block-sensitive-files.sh"
           }
         ]
       }
@@ -47,11 +47,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/debop/.claude/hooks/kotlin-ktlint.sh"
+            "command": "bash __HOME__/.claude/hooks/kotlin-ktlint.sh"
           },
           {
             "type": "command",
-            "command": "bash /Users/debop/.claude/hooks/kotlin-detekt.sh"
+            "command": "bash __HOME__/.claude/hooks/kotlin-detekt.sh"
           }
         ]
       }
@@ -62,11 +62,22 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/debop/.claude/plugins/cache/claude-context-mode/context-mode/0.9.17/hooks/sessionstart.mjs\""
+            "command": "node \"/opt/homebrew/lib/node_modules/context-mode/hooks/sessionstart.mjs\""
           },
           {
             "type": "command",
-            "command": "bash /Users/debop/.claude/hooks/dotfiles-sync.sh"
+            "command": "bash __HOME__/.claude/hooks/dotfiles-sync.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "CLAUDE_HOOK_EVENT=Stop bash __HOME__/.claude/hooks/dotfiles-sync.sh"
           }
         ]
       }
@@ -74,7 +85,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node /Users/debop/.claude/plugins/cache/claude-dashboard/claude-dashboard/1.15.0/dist/index.js"
+    "command": "node __HOME__/.claude/plugins/cache/claude-dashboard/claude-dashboard/1.15.0/dist/index.js"
   },
   "enabledPlugins": {
     "oh-my-claudecode@omc": true,

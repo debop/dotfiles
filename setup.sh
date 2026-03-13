@@ -36,7 +36,7 @@ if ! command -v brew &>/dev/null; then
   echo "  Homebrew 설치 중..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
-brew bundle install --file="$DOTFILES_DIR/Brewfile" --no-lock
+brew bundle install --file="$DOTFILES_DIR/Brewfile"
 
 # ── 2. 쉘 설정 ──────────────────────────────────────────────────────
 echo ""
@@ -67,9 +67,9 @@ mkdir -p "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"
 link_file "$DOTFILES_DIR/claude/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
 link_file "$DOTFILES_DIR/claude/RTK.md"    "$CLAUDE_DIR/RTK.md"
 
-# settings.json — 없을 때만 복사
+# settings.json — __HOME__ 치환 후 복사 (없을 때만)
 if [[ ! -f "$CLAUDE_DIR/settings.json" ]]; then
-  cp "$DOTFILES_DIR/claude/settings.json" "$CLAUDE_DIR/settings.json"
+  sed "s|__HOME__|$HOME|g" "$DOTFILES_DIR/claude/settings.json" > "$CLAUDE_DIR/settings.json"
   echo "  복사: settings.json (신규)"
 else
   echo "  스킵: settings.json (이미 존재 — 수동 머지 필요)"
