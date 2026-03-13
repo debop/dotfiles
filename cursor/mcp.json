@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "jetbrains": {
+      "url": "http://localhost:64342/sse"
+    }
+  }
+}
