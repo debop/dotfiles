@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "kotlin-spring",
+  "owner": "pluginagentmarketplace",
+  "repo": "custom-plugin-kotlin",
+  "path": "skills/kotlin-spring",
+  "branch": "main",
+  "sha": "ca3c78690f146d3e4285b86cc4c9b4e7aba37b4a",
+  "source": "manual"
+}

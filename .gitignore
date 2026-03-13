@@ -1,0 +1,18 @@
+# API 키 / 시크릿
+.env
+*.key
+*.pem
+
+# Claude Code 런타임 데이터
+claude/.claude.json
+claude/cache/
+claude/history.jsonl
+claude/plugins/
+claude/statsig/
+claude/projects/
+claude/tasks/
+claude/telemetry/
+claude/skills/omc-learned/
+
+# macOS
+.DS_Store
