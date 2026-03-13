@@ -155,9 +155,9 @@ override fun close() {
 ## DSL Builder 패턴
 
 ```kotlin
-// ✅ inline + @BuilderInference - 타입 추론 자동화
+// ✅ inline - Kotlin 2.0+ builder inference 자동화 (@BuilderInference 불필요)
 inline fun <K : Any, V : Any> nearCacheConfig(
-    @BuilderInference block: NearCacheConfigBuilder<K, V>.() -> Unit,
+    block: NearCacheConfigBuilder<K, V>.() -> Unit,
 ): NearCacheConfig<K, V> =
     NearCacheConfigBuilder<K, V>().apply(block).build()
 
@@ -511,6 +511,65 @@ val userRepo = UserRepository(
 )
 ```
 
+## IntelliJ IDE 진단 (코드 작성/리뷰 후)
+
+`mcp__intellij-index__ide_diagnostics` 도구로 파일 단위 IDE 검사를 실행한다.
+IDE가 포커스를 얻어야 재검사하므로, 편집 후 `ide_sync_files`로 인덱스를 갱신한다.
+
+```
+# 단일 파일 검사
+mcp__intellij-index__ide_diagnostics(
+    file = "infra/cache-lettuce-near/src/main/kotlin/.../Foo.kt",
+    project_path = "/Users/debop/work/bluetape4k/bluetape4k-experimental"
+)
+
+# 여러 파일 병렬 검사 → 한 메시지에 여러 tool call 동시 실행
+
+# 인덱스 강제 갱신 (편집 직후 stale 결과가 나올 때)
+mcp__intellij-index__ide_sync_files(
+    project_path = "/Users/debop/work/bluetape4k/bluetape4k-experimental"
+)
+```
+
+### severity별 처리 기준
+
+| severity | 처리 |
+|----------|------|
+| ERROR | 반드시 수정 |
+| WARNING - 미사용 import | 제거 |
+| WARNING - `private val` 생성자 파라미터 미사용 | `val` 제거 (초기화에만 쓰임) |
+| WARNING - deprecated API | 대안으로 교체 |
+| WEAK_WARNING - naming `_prefix` | 언더스코어 제거 |
+| WEAK_WARNING - setter 대신 property | `setFoo(x)` → `foo = x` |
+| WEAK_WARNING - boolean literal 인수 | named argument 적용 |
+| WEAK_WARNING - 중복 코드 조각 | **건드리지 않음** (의도적 분리) |
+
+### 자주 나오는 패턴과 수정
+
+```kotlin
+// WARNING: 생성자 전용 파라미터 private val 불필요
+class Foo(
+    redisClient: RedisClient,        // ✅ val 없음 - 초기화에만 사용
+    private val config: Config,      // ✅ val 유지 - 메서드에서 사용
+)
+
+// WEAK_WARNING: boolean literal without param name
+closed.compareAndSet(expect = false, update = true)  // ✅
+
+// WEAK_WARNING: setter method 대신 property
+options = ClientOptions.builder().build()  // ✅ (setOptions(...) 대신)
+
+// WEAK_WARNING: when subject 삽입
+when (idType) {                    // ✅ when(idType) 사용
+    Long::class.java -> ...
+    else -> ...
+}
+// ❌ when { idType == Long::class.java -> ... }
+
+// WARNING: @BuilderInference deprecated (Kotlin 2.0+)
+inline fun <K, V> nearCacheConfig(block: Builder<K,V>.() -> Unit) // ✅ 어노테이션 없이
+```
+
 ## 빠른 체크리스트
 
 | 항목 | 확인 |
@@ -531,3 +590,4 @@ val userRepo = UserRepository(
 | `src/test/resources`: `junit-platform.properties`, `logback-test.xml` | ✓ |
 | `README.md` 업데이트 | ✓ |
 | 테스트 작성 (Edge case 포함) | ✓ |
+| IntelliJ IDE 진단: `ide_diagnostics` 실행 후 ERROR/WARNING 수정 | ✓ |
