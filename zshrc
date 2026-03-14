@@ -24,6 +24,11 @@ export JDK_8=$JAVA_8_HOME
 
 export PATH=$GOPATH/bin:$HOME/.jenv/bin:$JAVA_HOME:/usr/local/bin:/usr/local/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:$PATH:$ANDROID_HOME
 
+# 터미널/폰트 아이콘이 깨지지 않도록 UTF-8 locale을 고정한다.
+export LANG="${LANG:-ko_KR.UTF-8}"
+export LC_CTYPE="${LC_CTYPE:-C.UTF-8}"
+export LC_ALL="${LC_ALL:-C.UTF-8}"
+
 # AsciiDoctor
 export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 
@@ -206,6 +211,15 @@ alias ll='eza -la --icons --git'
 alias lt='eza --tree --icons -L 2'
 alias cat='bat --paging=never'
 alias lg='lazygit'
+
+# tmux 안에서도 truecolor와 UTF-8 환경을 유지한다.
+if [[ -n "$TMUX" ]]; then
+  export TERM="${TERM:-tmux-256color}"
+  export COLORTERM="${COLORTERM:-truecolor}"
+fi
+
+# Gradle wrapper 및 JVM 프로세스에서 restricted native access 경고를 없애기 위함
+export JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED"
 
 # 시크릿 (git 미포함 — ~/.zshrc_secrets에 별도 관리)
 source ~/.zshrc_secrets 2>/dev/null || true

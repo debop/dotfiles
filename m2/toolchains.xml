@@ -9,7 +9,6 @@
       <jdkHome>/Users/debop/Library/Java/JavaVirtualMachines/temurin-11.0.27/Contents/Home</jdkHome>
     </configuration>
   </toolchain>
-
   <toolchain>
     <type>jdk</type>
     <provides>
@@ -31,7 +30,6 @@
       <jdkHome>/Library/Java/JavaVirtualMachines/graalvm-jdk-21/Contents/Home</jdkHome>
     </configuration>
   </toolchain>
-
   <toolchain>
     <type>jdk</type>
     <provides>
@@ -40,6 +38,16 @@
     </provides>
     <configuration>
       <jdkHome>/Library/Java/JavaVirtualMachines/graalvm-jdk-25/Contents/Home</jdkHome>
+    </configuration>
+  </toolchain>
+  <toolchain>
+    <type>jdk</type>
+    <provides>
+      <version>25</version>
+      <vendor>temurin</vendor>
+    </provides>
+    <configuration>
+      <jdkHome>/Users/debop/.m2/jdks/jdk-25.0.1+8/Contents/Home</jdkHome>
     </configuration>
   </toolchain>
 </toolchains>
