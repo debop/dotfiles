@@ -105,6 +105,21 @@ url = "https://mcp.notion.com/mcp"
 [mcp_servers.playwright]
 command = "npx"
 args = ["@playwright/mcp@latest"]
+
+[mcp_servers.git]
+command = "uvx"
+args = ["mcp-server-git"]
+startup_timeout_sec = 10.0
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+startup_timeout_sec = 10.0
+
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "${HOME}", "${HOME}/work"]
+startup_timeout_sec = 10.0
 EOF
 
   if intellij_app="$(find_intellij_app)"; then

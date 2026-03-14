@@ -3,6 +3,7 @@ set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 CODEX_SYNC_SCRIPT="${CODEX_SYNC_SCRIPT:-$DOTFILES_DIR/bin/sync-codex.sh}"
+CODEX_PREFLIGHT_SCRIPT="${CODEX_PREFLIGHT_SCRIPT:-$DOTFILES_DIR/bin/codex-preflight.sh}"
 SELF_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 
 find_real_codex() {
@@ -25,6 +26,10 @@ find_real_codex() {
 
 main() {
   local real_codex
+
+  if [[ -x "$CODEX_PREFLIGHT_SCRIPT" ]]; then
+    "$CODEX_PREFLIGHT_SCRIPT" || true
+  fi
 
   if [[ -x "$CODEX_SYNC_SCRIPT" ]]; then
     "$CODEX_SYNC_SCRIPT" --quiet

@@ -22,6 +22,13 @@
 - `bash ~/dotfiles/setup.sh`
 - 수동 동기화: `codex-sync`
 - 자동 동기화: 셸에서 `codex ...` 실행 직전에 `bin/sync-codex.sh --quiet` 가 먼저 실행된다.
+- 실행 전 preflight hook: `bin/codex-preflight.sh`
+- launchd 감시: `bin/codex-sync-watch.sh`
+
+기본 추천 구성:
+- Skills: `openai-docs`, `playwright`, `gh-fix-ci`
+- Agents: `architect`, `executor`, `verifier`, `debugger`, `code-reviewer`, `test-engineer`
+- MCP: `git`, `filesystem`, `context7`, `playwright`, `intellij`, `intellij-index`, `notion`
 
 환경 변수로 오버라이드 가능:
 - `DOTFILES_DIR`
