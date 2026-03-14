@@ -1,7 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+resolve_source_path() {
+  local source_path="$1"
+  local link_target
+
+  while [[ -L "$source_path" ]]; do
+    link_target="$(readlink "$source_path")"
+    if [[ "$link_target" == /* ]]; then
+      source_path="$link_target"
+    else
+      source_path="$(cd "$(dirname "$source_path")" && cd "$(dirname "$link_target")" && pwd)/$(basename "$link_target")"
+    fi
+  done
+
+  printf '%s\n' "$source_path"
+}
+
+SOURCE_PATH="$(resolve_source_path "${BASH_SOURCE[0]}")"
+
+SCRIPT_DIR="$(cd "$(dirname "$SOURCE_PATH")" && pwd)"
 DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 QUIET=0
@@ -272,6 +290,16 @@ sync_dir() {
   rsync -a --delete "$src/" "$dst/"
 }
 
+install_file() {
+  local src="$1"
+  local dst="$2"
+  local mode="${3:-0644}"
+
+  mkdir -p "$(dirname "$dst")"
+  cp "$src" "$dst"
+  chmod "$mode" "$dst"
+}
+
 main() {
   local codex_dir="$HOME/.codex"
   local agents_dir="$HOME/.agents"
@@ -280,7 +308,7 @@ main() {
 
   mkdir -p "$codex_dir" "$agents_dir" "$omx_agents_dir"
 
-  install -m 0644 "$DOTFILES_DIR/codex/AGENTS.md" "$codex_dir/AGENTS.md"
+  install_file "$DOTFILES_DIR/codex/AGENTS.md" "$codex_dir/AGENTS.md"
   sync_dir "$DOTFILES_DIR/codex/prompts" "$codex_dir/prompts"
   sync_dir "$DOTFILES_DIR/codex/rules" "$codex_dir/rules"
   sync_dir "$DOTFILES_DIR/codex/skills" "$codex_dir/skills"
@@ -289,7 +317,7 @@ main() {
 
   tmp_config="$(mktemp "${TMPDIR:-/tmp}/codex-config.XXXXXX")"
   render_codex_config "$tmp_config"
-  install -m 0644 "$tmp_config" "$codex_dir/config.toml"
+  install_file "$tmp_config" "$codex_dir/config.toml"
   rm -f "$tmp_config"
 
   log "Codex sync complete"
