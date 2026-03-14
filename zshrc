@@ -162,23 +162,26 @@ killport9() {
   kill -9 $pids
 }
 
-# Claude Code aliases
+# Claude Code / Codex — 실행 전 dotfiles 동기화
+export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+
+_dotfiles_sync() {
+  [[ -x "$DOTFILES_DIR/bin/dotfiles-sync.sh" ]] && \
+    "$DOTFILES_DIR/bin/dotfiles-sync.sh" --quiet >/dev/null 2>&1 || true
+}
+
+claude() {
+  _dotfiles_sync
+  command claude "$@"
+}
 alias cc='claude'
 alias ccd='claude --dangerously-skip-permissions'
 alias ccr='claude --resume --dangerously-skip-permissions'
 
-# Codex sync + wrapper
-export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
-export CODEX_SYNC_SCRIPT="$DOTFILES_DIR/bin/sync-codex.sh"
-
-codex-sync() {
-  command codex-sync "$@"
-}
-
 codex() {
-  if [[ -x "$CODEX_SYNC_SCRIPT" ]]; then
-    "$CODEX_SYNC_SCRIPT" --quiet >/dev/null 2>&1 || true
-  fi
+  _dotfiles_sync
+  [[ -x "$DOTFILES_DIR/bin/sync-codex.sh" ]] && \
+    "$DOTFILES_DIR/bin/sync-codex.sh" --quiet >/dev/null 2>&1 || true
   command codex "$@"
 }
 
