@@ -70,6 +70,17 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/debop/dotfiles/bin/dotfiles-sync.sh --quiet"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {

@@ -6,7 +6,7 @@ set -euo pipefail
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
 CODEX_DIR="$HOME/.codex"
-ENABLE_CLAUDE_DOTFILES="${ENABLE_CLAUDE_DOTFILES:-0}"
+ENABLE_CLAUDE_DOTFILES="${ENABLE_CLAUDE_DOTFILES:-1}"
 
 echo "==> dotfiles 설치 시작: $DOTFILES_DIR"
 
