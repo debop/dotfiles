@@ -19,5 +19,22 @@ claude/skills/omc-learned/
 # OMC 런타임 상태
 .omc/
 
+# Codex 런타임 데이터
+codex/auth.json
+codex/history.jsonl
+codex/archived_sessions/
+codex/log/
+codex/logs_*.sqlite
+codex/logs_*.sqlite-shm
+codex/logs_*.sqlite-wal
+codex/models_cache.json
+codex/session_index.jsonl
+codex/shell_snapshots/
+codex/sqlite/
+codex/state_*.sqlite
+codex/state_*.sqlite-shm
+codex/state_*.sqlite-wal
+codex/vendor_imports/
+
 # macOS
 .DS_Store

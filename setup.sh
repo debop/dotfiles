@@ -5,6 +5,7 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
+CODEX_DIR="$HOME/.codex"
 
 echo "==> dotfiles 설치 시작: $DOTFILES_DIR"
 
@@ -31,7 +32,7 @@ mcp_add() {
 
 # ── 1. Homebrew ──────────────────────────────────────────────────────
 echo ""
-echo "==> [1/5] Homebrew 패키지..."
+echo "==> [1/8] Homebrew 패키지..."
 if ! command -v brew &>/dev/null; then
   echo "  Homebrew 설치 중..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -40,7 +41,7 @@ brew bundle install --file="$DOTFILES_DIR/Brewfile"
 
 # ── 2. 쉘 설정 ──────────────────────────────────────────────────────
 echo ""
-echo "==> [2/5] 쉘 설정..."
+echo "==> [2/8] 쉘 설정..."
 link_file "$DOTFILES_DIR/zshrc"    "$HOME/.zshrc"
 link_file "$DOTFILES_DIR/zprofile" "$HOME/.zprofile"
 link_file "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig"
@@ -55,13 +56,13 @@ fi
 
 # ── 3. Cursor ────────────────────────────────────────────────────────
 echo ""
-echo "==> [3/5] Cursor 설정..."
+echo "==> [3/8] Cursor 설정..."
 mkdir -p "$HOME/.cursor"
 link_file "$DOTFILES_DIR/cursor/mcp.json" "$HOME/.cursor/mcp.json"
 
 # ── 4. Claude Code 설정 ──────────────────────────────────────────────
 echo ""
-echo "==> [4/5] Claude Code 설정..."
+echo "==> [4/8] Claude Code 설정..."
 mkdir -p "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"
 
 link_file "$DOTFILES_DIR/claude/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
@@ -94,9 +95,16 @@ for skill_dir in "$DOTFILES_DIR/claude/skills/"*/; do
   echo "  링크: skills/$name"
 done
 
-# ── 5. MCP 서버 자동 등록 ────────────────────────────────────────────
+# ── 5. Codex / oh-my-codex 설정 ─────────────────────────────────────
 echo ""
-echo "==> [5/5] MCP 서버 등록..."
+echo "==> [5/8] Codex 설정..."
+mkdir -p "$CODEX_DIR" "$HOME/.agents" "$HOME/.omx/agents"
+chmod +x "$DOTFILES_DIR/bin/sync-codex.sh"
+"$DOTFILES_DIR/bin/sync-codex.sh"
+
+# ── 6. MCP 서버 자동 등록 ────────────────────────────────────────────
+echo ""
+echo "==> [6/8] MCP 서버 등록..."
 mcp_add git        uvx mcp-server-git
 mcp_add context7   npx -y @upstash/context7-mcp
 mcp_add filesystem npx -y @modelcontextprotocol/server-filesystem "$HOME" "$HOME/work"
@@ -109,9 +117,9 @@ else
   echo "        claude mcp add exa -- npx -y exa-mcp-server"
 fi
 
-# ── 6. Gradle 설정 ───────────────────────────────────────────────────
+# ── 7. Gradle 설정 ───────────────────────────────────────────────────
 echo ""
-echo "==> [6/7] Gradle 설정..."
+echo "==> [7/8] Gradle 설정..."
 mkdir -p "$HOME/.gradle"
 if [[ ! -f "$HOME/.gradle/gradle.properties" ]]; then
   cp "$DOTFILES_DIR/gradle/gradle.properties.example" "$HOME/.gradle/gradle.properties"
@@ -120,9 +128,9 @@ else
   echo "  스킵: ~/.gradle/gradle.properties (이미 존재)"
 fi
 
-# ── 7. Maven toolchains + jenv ────────────────────────────────────────
+# ── 8. Maven toolchains + jenv ────────────────────────────────────────
 echo ""
-echo "==> [7/7] Maven toolchains + jenv 설정..."
+echo "==> [8/8] Maven toolchains + jenv 설정..."
 mkdir -p "$HOME/.m2"
 link_file "$DOTFILES_DIR/m2/toolchains.xml" "$HOME/.m2/toolchains.xml"
 
@@ -143,4 +151,5 @@ echo "  1. ~/.zshrc_secrets 에 API 키 값 입력"
 echo "  2. ~/.gradle/gradle.properties 에 토큰/GPG 키 값 입력"
 echo "  3. 새 터미널 열기 (zshrc 반영)"
 echo "  4. Claude Code 재시작"
-echo "  5. JetBrains IDE 열면 jetbrains/intellij-index MCP 자동 등록됨"
+echo "  5. Codex 실행 전 dotfiles 기반 sync 가 자동 수행됨"
+echo "  6. JetBrains IDE 열면 jetbrains/intellij-index MCP 자동 등록됨"

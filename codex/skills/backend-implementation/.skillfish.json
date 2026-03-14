@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "backend-implementation",
+  "owner": "jpicklyk",
+  "repo": "task-orchestrator",
+  "path": "claude-plugins/task-orchestrator/skills/backend-implementation",
+  "branch": "main",
+  "sha": "35b16737882c57ab98185967e97e0950d64b4f56",
+  "source": "manual"
+}
