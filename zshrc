@@ -218,8 +218,5 @@ if [[ -n "$TMUX" ]]; then
   export COLORTERM="${COLORTERM:-truecolor}"
 fi
 
-# Gradle wrapper 및 JVM 프로세스에서 restricted native access 경고를 없애기 위함
-export JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED"
-
 # 시크릿 (git 미포함 — ~/.zshrc_secrets에 별도 관리)
 source ~/.zshrc_secrets 2>/dev/null || true
