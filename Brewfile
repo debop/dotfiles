@@ -158,7 +158,6 @@ cask "opencode-desktop"
 cask "slack"
 cask "visual-studio-code"
 cask "webull"
-mas "Blackmagic Disk Speed Test", id: 425264550
 mas "GarageBand", id: 682658836
 mas "iMovie", id: 408981434
 mas "Keynote", id: 361285480
@@ -168,7 +167,6 @@ mas "Numbers", id: 361304891
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Pages", id: 361309726
-mas "Perplexity", id: 6714467650
 mas "Xcode", id: 497799835
 mas "카카오톡", id: 869223134
 vscode "dineug.vuerd-vscode"
