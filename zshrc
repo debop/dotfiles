@@ -2,7 +2,8 @@ ZSH_DISABLE_COMPFIX=true
 export ZSH="/Users/debop/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="agnoster"
-plugins=(alias-tips asdf aws brew colorize docker docker-compose fzf git gitignore git-flow git-prompt github golang gradle httpie jenv mvn npm pip python scala spring sudo systemd themes vscode xcode)
+plugins=(alias-tips asdf aws brew colorize docker docker-compose git gitignore git-flow git-prompt github golang gradle httpie jenv mvn npm pip python scala spring sudo systemd themes vscode xcode)
+[[ -t 0 && -t 1 ]] && plugins=(fzf "${plugins[@]}")
 
 export ANDROID_HOME=~/Library/Android/sdk
 export JMETER_HOME=/usr/local/bin/jmeter
@@ -94,7 +95,7 @@ export PATH="/Users/debop/.antigravity/antigravity/bin:$PATH"
 # OpenClaw Completion
 [[ -f "/Users/debop/.openclaw/completions/openclaw.zsh" ]] && source "/Users/debop/.openclaw/completions/openclaw.zsh"
 
-[[ -f "/Users/debop/.config/kaku/zsh/kaku.zsh" ]] && source "/Users/debop/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
+[[ -o interactive && -t 0 && -f "/Users/debop/.config/kaku/zsh/kaku.zsh" ]] && source "/Users/debop/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
 
 portpid() {
   local port="$1"
