@@ -6,17 +6,20 @@ set -euo pipefail
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
 CODEX_DIR="$HOME/.codex"
+ENABLE_CLAUDE_DOTFILES="${ENABLE_CLAUDE_DOTFILES:-0}"
 
 echo "==> dotfiles 설치 시작: $DOTFILES_DIR"
 
 # ── 헬퍼 ─────────────────────────────────────────────────────────────
 link_file() {
   local src="$1" dst="$2"
-  if [[ -e "$dst" && ! -L "$dst" ]]; then
+  if [[ -L "$dst" ]]; then
+    rm -f "$dst"
+  elif [[ -e "$dst" ]]; then
     echo "  백업: $dst -> $dst.bak"
     mv "$dst" "$dst.bak"
   fi
-  ln -sf "$src" "$dst"
+  ln -s "$src" "$dst"
   echo "  링크: $dst"
 }
 
@@ -71,37 +74,40 @@ link_file "$DOTFILES_DIR/cursor/mcp.json" "$HOME/.cursor/mcp.json"
 # ── 4. Claude Code 설정 ──────────────────────────────────────────────
 echo ""
 echo "==> [4/8] Claude Code 설정..."
-mkdir -p "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"
+if [[ "$ENABLE_CLAUDE_DOTFILES" == "1" ]]; then
+  mkdir -p "$CLAUDE_DIR/skills" "$CLAUDE_DIR/hooks"
 
-link_file "$DOTFILES_DIR/claude/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
-link_file "$DOTFILES_DIR/claude/RTK.md"    "$CLAUDE_DIR/RTK.md"
+  link_file "$DOTFILES_DIR/claude/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
+  link_file "$DOTFILES_DIR/claude/RTK.md"    "$CLAUDE_DIR/RTK.md"
 
-# settings.json — __HOME__ 치환 후 복사 (없을 때만)
-if [[ ! -f "$CLAUDE_DIR/settings.json" ]]; then
-  sed "s|__HOME__|$HOME|g" "$DOTFILES_DIR/claude/settings.json" > "$CLAUDE_DIR/settings.json"
-  echo "  복사: settings.json (신규)"
-else
-  echo "  스킵: settings.json (이미 존재 — 수동 머지 필요)"
-fi
-
-# hooks
-for hook in "$DOTFILES_DIR/claude/hooks/"*.sh; do
-  name="$(basename "$hook")"
-  link_file "$hook" "$CLAUDE_DIR/hooks/$name"
-  chmod +x "$CLAUDE_DIR/hooks/$name"
-done
-
-# skills
-for skill_dir in "$DOTFILES_DIR/claude/skills/"*/; do
-  name="$(basename "$skill_dir")"
-  dst="$CLAUDE_DIR/skills/$name"
-  if [[ -e "$dst" && ! -L "$dst" ]]; then
-    mv "$dst" "${dst}.bak"
-    echo "  백업: skills/$name"
+  # settings.json — __HOME__ 치환 후 복사 (없을 때만)
+  if [[ ! -f "$CLAUDE_DIR/settings.json" ]]; then
+    sed "s|__HOME__|$HOME|g" "$DOTFILES_DIR/claude/settings.json" > "$CLAUDE_DIR/settings.json"
+    echo "  복사: settings.json (신규)"
+  else
+    echo "  스킵: settings.json (이미 존재 — 수동 머지 필요)"
   fi
-  ln -sf "$skill_dir" "$dst"
-  echo "  링크: skills/$name"
-done
+
+  # hooks
+  for hook in "$DOTFILES_DIR/claude/hooks/"*.sh; do
+    name="$(basename "$hook")"
+    link_file "$hook" "$CLAUDE_DIR/hooks/$name"
+    chmod +x "$CLAUDE_DIR/hooks/$name"
+  done
+
+  # skills
+  for skill_dir in "$DOTFILES_DIR/claude/skills/"*/; do
+    name="$(basename "$skill_dir")"
+    dst="$CLAUDE_DIR/skills/$name"
+    if [[ -e "$dst" && ! -L "$dst" ]]; then
+      mv "$dst" "${dst}.bak"
+      echo "  백업: skills/$name"
+    fi
+    link_file "$skill_dir" "$dst"
+  done
+else
+  echo "  스킵: Claude 경로는 자동 관리하지 않음 (ENABLE_CLAUDE_DOTFILES=1 로 opt-in)"
+fi
 
 # ── 5. Codex / oh-my-codex 설정 ─────────────────────────────────────
 echo ""
