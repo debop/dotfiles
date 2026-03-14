@@ -170,6 +170,13 @@ codex-sync() {
   command codex-sync "$@"
 }
 
+codex() {
+  if [[ -x "$CODEX_SYNC_SCRIPT" ]]; then
+    "$CODEX_SYNC_SCRIPT" --quiet >/dev/null 2>&1 || true
+  fi
+  command codex "$@"
+}
+
 # ─────────────────────────────────────────────
 # Rust 기반 CLI 도구 초기화
 # ─────────────────────────────────────────────
