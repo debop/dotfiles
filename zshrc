@@ -92,7 +92,7 @@ export PATH=$HOME/.cargo/bin:$PATH
 export PATH="/Users/debop/.antigravity/antigravity/bin:$PATH"
 
 # OpenClaw Completion
-source "/Users/debop/.openclaw/completions/openclaw.zsh"
+[[ -f "/Users/debop/.openclaw/completions/openclaw.zsh" ]] && source "/Users/debop/.openclaw/completions/openclaw.zsh"
 
 [[ -f "/Users/debop/.config/kaku/zsh/kaku.zsh" ]] && source "/Users/debop/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
 
