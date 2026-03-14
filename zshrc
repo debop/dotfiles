@@ -166,19 +166,7 @@ export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 export CODEX_SYNC_SCRIPT="$DOTFILES_DIR/bin/sync-codex.sh"
 
 codex-sync() {
-  if [[ -x "$CODEX_SYNC_SCRIPT" ]]; then
-    "$CODEX_SYNC_SCRIPT"
-  else
-    echo "codex sync script not found: $CODEX_SYNC_SCRIPT" >&2
-    return 1
-  fi
-}
-
-codex() {
-  if [[ -x "$CODEX_SYNC_SCRIPT" ]]; then
-    "$CODEX_SYNC_SCRIPT" --quiet
-  fi
-  command codex "$@"
+  command codex-sync "$@"
 }
 
 # ─────────────────────────────────────────────

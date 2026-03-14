@@ -30,6 +30,13 @@ mcp_add() {
   fi
 }
 
+install_from_template() {
+  local src="$1" dst="$2"
+  mkdir -p "$(dirname "$dst")"
+  sed "s|__HOME__|$HOME|g" "$src" > "$dst"
+  echo "  생성: $dst"
+}
+
 # ── 1. Homebrew ──────────────────────────────────────────────────────
 echo ""
 echo "==> [1/8] Homebrew 패키지..."
@@ -45,6 +52,7 @@ echo "==> [2/8] 쉘 설정..."
 link_file "$DOTFILES_DIR/zshrc"    "$HOME/.zshrc"
 link_file "$DOTFILES_DIR/zprofile" "$HOME/.zprofile"
 link_file "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig"
+mkdir -p "$HOME/.local/bin"
 
 # 시크릿 파일 안내
 if [[ ! -f "$HOME/.zshrc_secrets" ]]; then
@@ -100,7 +108,18 @@ echo ""
 echo "==> [5/8] Codex 설정..."
 mkdir -p "$CODEX_DIR" "$HOME/.agents" "$HOME/.omx/agents"
 chmod +x "$DOTFILES_DIR/bin/sync-codex.sh"
+chmod +x "$DOTFILES_DIR/bin/codex-wrapper.sh"
+chmod +x "$DOTFILES_DIR/bin/codex-sync-watch.sh"
+link_file "$DOTFILES_DIR/bin/codex-wrapper.sh" "$HOME/.local/bin/codex"
+link_file "$DOTFILES_DIR/bin/sync-codex.sh" "$HOME/.local/bin/codex-sync"
 "$DOTFILES_DIR/bin/sync-codex.sh"
+
+mkdir -p "$HOME/Library/LaunchAgents"
+install_from_template \
+  "$DOTFILES_DIR/launchagents/com.debop.codex-sync-watch.plist" \
+  "$HOME/Library/LaunchAgents/com.debop.codex-sync-watch.plist"
+launchctl unload "$HOME/Library/LaunchAgents/com.debop.codex-sync-watch.plist" >/dev/null 2>&1 || true
+launchctl load "$HOME/Library/LaunchAgents/com.debop.codex-sync-watch.plist"
 
 # ── 6. MCP 서버 자동 등록 ────────────────────────────────────────────
 echo ""
