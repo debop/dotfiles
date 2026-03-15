@@ -141,6 +141,7 @@ cask "font-ubuntu"
 cask "font-ubuntu-mono"
 cask "font-ubuntu-sans"
 cask "font-ubuntu-sans-mono"
+cask "ghostty"
 cask "github"
 cask "graalvm/tap/graalvm-jdk17"
 cask "graalvm/tap/graalvm-jdk21"
@@ -158,17 +159,7 @@ cask "opencode-desktop"
 cask "slack"
 cask "visual-studio-code"
 cask "webull"
-mas "GarageBand", id: 682658836
-mas "iMovie", id: 408981434
-mas "Keynote", id: 361285480
-mas "Keynote", id: 409183694
 mas "Monosnap", id: 540348655
-mas "Numbers", id: 361304891
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
-mas "Pages", id: 361309726
-mas "Xcode", id: 497799835
-mas "카카오톡", id: 869223134
 vscode "dineug.vuerd-vscode"
 vscode "github.copilot-chat"
 vscode "pomdtr.markdown-kroki"
